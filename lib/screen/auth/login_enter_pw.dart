@@ -72,7 +72,7 @@ class _LoginEnterPwState extends ConsumerState<LoginEnterPw> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        context.push('/main');
+                        context.go('/main');
                       },
                       child: Text("다음"),
                     ),
