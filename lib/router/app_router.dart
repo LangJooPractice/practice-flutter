@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:prac/screen/auth/login_enter_id.dart';
 import 'package:prac/screen/auth/login_enter_pw.dart';
 import 'package:prac/screen/auth/login_screen.dart';
+import 'package:prac/screen/home/main_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -24,6 +25,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/login-enter-pw',
         builder: (context, state) {
           return LoginEnterPw();
+        },
+      ),
+      GoRoute(
+        path: '/main',
+        builder: (context, state) {
+          return MainPage();
         },
       ),
     ],
