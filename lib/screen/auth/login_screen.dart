@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -43,7 +44,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Expanded(child: Divider(thickness: 1, color: Colors.grey)),
                 ],
               ),
-              ElevatedButton(onPressed: () {}, child: Text("기존 계정으로 로그인하기")),
+              ElevatedButton(
+                onPressed: () {
+                  context.push('/login-enter-id');
+                },
+                child: Text("기존 계정으로 로그인하기"),
+              ),
             ],
           ),
         ),
