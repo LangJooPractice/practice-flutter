@@ -39,7 +39,7 @@ class _MainShellState extends ConsumerState<MainShell> {
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
-              icon: Icon(Icons.menu),
+              icon: Icon(Icons.account_circle_outlined),
             );
           },
         ),
@@ -52,7 +52,6 @@ class _MainShellState extends ConsumerState<MainShell> {
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.black,
         backgroundColor: Colors.white,
-        unselectedItemColor: Colors.green,
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(

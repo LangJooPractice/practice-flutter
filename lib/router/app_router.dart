@@ -3,12 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:prac/screen/auth/login_enter_id.dart';
 import 'package:prac/screen/auth/login_enter_pw.dart';
 import 'package:prac/screen/auth/login_screen.dart';
-import 'package:prac/screen/home/grok.dart';
-import 'package:prac/screen/home/main_page.dart';
-import 'package:prac/screen/home/main_shell.dart';
-import 'package:prac/screen/home/message.dart';
-import 'package:prac/screen/home/notification.dart';
-import 'package:prac/screen/home/search.dart';
+import 'package:prac/screen/navbar/pages/grok.dart';
+import 'package:prac/screen/navbar/pages/main_page.dart';
+import 'package:prac/screen/navbar/shell/main_shell.dart';
+import 'package:prac/screen/navbar/pages/message.dart';
+import 'package:prac/screen/navbar/pages/notification.dart';
+import 'package:prac/screen/navbar/pages/search.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
