@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prac/models/article_model.dart';
 import 'package:prac/provider/article_provider.dart';
+import 'package:prac/provider/scroll_provider.dart';
 
 //InkWell위젯을 사용하면 Inkwel child의 Row내의 children위젯들을 겹치기 할 수있다는 사실!
 
@@ -15,10 +16,16 @@ class Recommendation extends ConsumerStatefulWidget {
 class _RecommendationState extends ConsumerState<Recommendation> {
   @override
   Widget build(BuildContext context) {
-    final articleAsync = ref.watch(ArticleProvider);
+    final scrollController = ref.read(
+      scrollControllerProvider,
+    ); //스크롤 컨트롤러로 스크롤 위치 유지, 무한 스크롤 등의 기능을 함
+    final articleAsync = ref.watch(
+      ArticleProvider,
+    ); //백으로부터 article의 정보를 가져와 리스트뷰에 뿌려줌
     return articleAsync.when(
       data: (articles) {
         return ListView.builder(
+          controller: scrollController,
           itemCount: articles.length,
           itemBuilder: (context, index) {
             final article = articles[index];
@@ -55,7 +62,14 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
           children: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.account_circle_outlined, size: 40),
+              icon: ClipOval(
+                child: Image.network(
+                  width: 40,
+                  height: 40,
+                  widget.articles.profile_picture,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             Expanded(
               child: Column(

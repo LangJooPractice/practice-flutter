@@ -5,9 +5,9 @@ class ArticleApiService {
   final Dio _dio = Dio();
 
   Future<List<ArticleModel>> fetchArticles() async {
-    const url = 'https://693108ef11a8738467ccfc6c.mockapi.io/article_model';
+    const url = 'https://693108ef11a8738467ccfc6c.mockapi.io/';
 
-    final response = await _dio.get(url);
+    final response = await _dio.get("${url}article_model");
 
     // response.data = List<dynamic>
     final List<dynamic> dataList = response.data;

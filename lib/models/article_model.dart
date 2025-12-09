@@ -1,4 +1,5 @@
 class ArticleModel {
+  final String profile_picture;
   final String nickname;
   final String nickname_id;
   final String time;
@@ -10,6 +11,8 @@ class ArticleModel {
   final String id;
 
   ArticleModel({
+    required this.profile_picture,
+
     required this.nickname,
     required this.nickname_id,
     required this.time,
@@ -23,6 +26,7 @@ class ArticleModel {
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
+      profile_picture: json['profile_picture'],
       nickname: json['nickname'],
       nickname_id: json['nickname_id'],
       time: json['time'],
