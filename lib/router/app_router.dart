@@ -5,6 +5,7 @@ import 'package:prac/screen/auth/login_enter_pw.dart';
 import 'package:prac/screen/auth/login_screen.dart';
 import 'package:prac/screen/navbar/pages/grok.dart';
 import 'package:prac/screen/navbar/pages/main_page.dart';
+import 'package:prac/screen/navbar/pages/main_page/post/article_post.dart';
 import 'package:prac/screen/navbar/profile.dart';
 import 'package:prac/screen/navbar/shell/main_shell.dart';
 import 'package:prac/screen/navbar/pages/message.dart';
@@ -31,6 +32,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/profile',
         builder: (context, state) {
           return Profile();
+        },
+      ),
+      GoRoute(
+        path: '/post',
+        builder: (context, state) {
+          return ArticlePost();
         },
       ),
 

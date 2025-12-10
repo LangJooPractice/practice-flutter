@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -12,6 +16,21 @@ class MainShell extends ConsumerStatefulWidget {
 }
 
 class _MainShellState extends ConsumerState<MainShell> {
+  //dial 이 열려있는지 닫혀있는지 봄.
+  final isOpenProvider = StateProvider<bool>((ref) {
+    return false;
+  });
+
+  // final ValueNotifier<bool> isFabOpen = ValueNotifier(false);
+  // Widget FabButton() {
+  //   return IconButton(
+  //     onPressed: () {
+  //       context.go('/post');
+  //     },
+  //     icon: Icon(Icons.close),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
@@ -99,6 +118,38 @@ class _MainShellState extends ConsumerState<MainShell> {
             context.go('/message');
           }
         },
+      ),
+
+      //flutter_speed_dial 을 이용한 floating action button구현
+      floatingActionButton: SpeedDial(
+        dialRoot: (context, isOpen, toggleChildren) {
+          //isOpen == False 인 경우 즉 처음 버튼을 누르는 경우 => dial 열기 기능 동작
+          return FloatingActionButton(
+            shape: CircleBorder(),
+            onPressed: () {
+              if (!isOpen) {
+                // 1. 닫힌 상태 → 메뉴 열기만
+                debugPrint('FAB if (open == false)');
+                toggleChildren(); // ← 이게 열기
+              } else {
+                // 2. 열린 상태 → 액션 실행 + 메뉴 닫기
+                debugPrint('FAB else (open == true)');
+                context.push('/post');
+                toggleChildren(); // ← 이게 닫기
+              }
+            },
+            child: Icon(isOpen ? Icons.post_add : Icons.close),
+          );
+        },
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.photo_size_select_actual_rounded),
+            label: "사진",
+          ),
+          SpeedDialChild(child: Icon(Icons.mic), label: "스페이스"),
+          SpeedDialChild(child: Icon(Icons.video_call), label: "생방송 시작하기"),
+        ],
+        child: Icon(Icons.add),
       ),
     );
   }
