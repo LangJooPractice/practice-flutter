@@ -145,6 +145,9 @@ class _MainShellState extends ConsumerState<MainShell> {
           SpeedDialChild(
             child: Icon(Icons.photo_size_select_actual_rounded),
             label: "사진",
+            onTap: () {
+              context.push('/post');
+            },
           ),
           SpeedDialChild(child: Icon(Icons.mic), label: "스페이스"),
           SpeedDialChild(child: Icon(Icons.video_call), label: "생방송 시작하기"),
