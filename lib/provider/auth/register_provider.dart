@@ -6,6 +6,10 @@ final registerApiServiceProvider = Provider<RegisterApiService>((ref) {
   return RegisterApiService();
 });
 
+//StateNotifierProvider는 <NotifierType,StateType>을 가지며
+//NotifierType은 상태변화 로직을 포함하는 class이다.
+//AsyncValue<>는 위로인해 변화한 상태의 부모이다
+//즉 NotifierType를 통해 로직변화가 이루어지고 이를통한 상태변화의 결과가 AsyncValue<>
 final postRegisterProvider =
     StateNotifierProvider<RegisterProvider, AsyncValue<String?>>((ref) {
       return RegisterProvider(api: ref.watch(registerApiServiceProvider));
@@ -21,7 +25,7 @@ class RegisterProvider extends StateNotifier<AsyncValue<String?>> {
     //일단 로딩으로 바꿔
     state = AsyncLoading();
     //---------------------------------------
-    if (email == "test" && password == "test") {
+    if (email == "test@test.com" && password == "123456") {
       state = AsyncData("success");
       return "success";
     }

@@ -57,6 +57,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
                 child: Text("회원가입하기"),
               ),
+              TextButton(
+                onPressed: () {
+                  context.go('/main');
+                },
+                child: Text("메인으로 이동"),
+              ),
             ],
           ),
         ),
