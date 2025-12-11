@@ -20,10 +20,9 @@ class RegisterProvider extends StateNotifier<AsyncValue<String?>> {
 
   RegisterProvider({required this.api}) : super(const AsyncData(null));
   Future<String> postRegister(String email, String password) async {
-    //1차 검증
-
     //일단 로딩으로 바꿔
     state = AsyncLoading();
+    //테스트 코드
     //---------------------------------------
     if (email == "test@test.com" && password == "123456") {
       state = AsyncData("success");

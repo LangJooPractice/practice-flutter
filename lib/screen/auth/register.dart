@@ -13,12 +13,13 @@ class Register extends ConsumerStatefulWidget {
 class _RegisterState extends ConsumerState<Register> {
   final registerEmailController = TextEditingController();
   final registerPasswordController = TextEditingController();
+  //password textform 에서 비밀번호를 보일지 말지 결정하는 bool값
   bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     //Form 위젯 밖에서(버튼) form.validate()을 하기 위해서 key를 사용하여 formState에 접근
-    final formKey = GlobalKey<FormState>();
+    // final formKey = GlobalKey<FormState>();
     //--------------------------------------------
     //이건 회원가입 페이지에서 버튼등을 누를때 사용
     final registerState = ref.watch(postRegisterProvider);
@@ -68,7 +69,6 @@ class _RegisterState extends ConsumerState<Register> {
             Center(child: Text("계정을 생성하세요")),
 
             Form(
-              key: formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
@@ -105,7 +105,9 @@ class _RegisterState extends ConsumerState<Register> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "비밀번호를 입력하세요,";
-                      } else if (value.length < 5) {
+                      }
+                      //Null 체크 이후 value.length 사용
+                      else if (value.length < 5) {
                         return "비밀번호는 최소 6자리여야 합니다.";
                       }
                       return null;
