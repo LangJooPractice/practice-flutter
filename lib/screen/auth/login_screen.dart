@@ -50,6 +50,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
                 child: Text("기존 계정으로 로그인하기"),
               ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  context.push('/register');
+                },
+                child: Text("회원가입하기"),
+              ),
             ],
           ),
         ),

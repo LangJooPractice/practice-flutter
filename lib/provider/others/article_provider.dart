@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:prac/models/article_model.dart';
+import 'package:prac/models/others/article_model.dart';
 import 'package:prac/services/article_api_service.dart';
 
 final articleApiServiceProvider = Provider<ArticleApiService>((ref) {

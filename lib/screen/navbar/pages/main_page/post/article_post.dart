@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prac/provider/article_provider.dart';
-import 'package:prac/provider/comment_control_provider.dart';
+import 'package:prac/provider/others/article_provider.dart';
+import 'package:prac/provider/others/comment_control_provider.dart';
 
 class ArticlePost extends ConsumerStatefulWidget {
   const ArticlePost({super.key});

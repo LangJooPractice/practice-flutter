@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:prac/models/article_model.dart';
+import 'package:prac/models/others/article_model.dart';
 
 class ArticleApiService {
   final Dio _dio = Dio(

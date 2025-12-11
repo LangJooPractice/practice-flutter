@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:prac/screen/auth/login_enter_id.dart';
 import 'package:prac/screen/auth/login_enter_pw.dart';
 import 'package:prac/screen/auth/login_screen.dart';
+import 'package:prac/screen/auth/register.dart';
 import 'package:prac/screen/navbar/pages/grok.dart';
 import 'package:prac/screen/navbar/pages/main_page.dart';
 import 'package:prac/screen/navbar/pages/main_page/post/article_post.dart';
@@ -40,7 +41,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return ArticlePost();
         },
       ),
-
+      GoRoute(
+        path: '/register',
+        builder: (context, state) {
+          return Register();
+        },
+      ),
       // ============================
       // 메인 그룹 (ShellRoute 안)
       // ============================

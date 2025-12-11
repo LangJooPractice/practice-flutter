@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prac/models/article_model.dart';
-import 'package:prac/provider/article_provider.dart';
-import 'package:prac/provider/scroll_provider.dart';
+import 'package:prac/models/others/article_model.dart';
+import 'package:prac/provider/others/article_provider.dart';
+import 'package:prac/provider/others/scroll_provider.dart';
 
 //InkWell위젯을 사용하면 Inkwel child의 Row내의 children위젯들을 겹치기 할 수있다는 사실!
 
