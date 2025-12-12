@@ -141,7 +141,7 @@ class _RegisterState extends ConsumerState<Register> {
                   //이후 응답을 받으면 AsyncData값을 가지므로 다시 버튼을 활성화 함
                   child: registerState.isLoading
                       ? CircularProgressIndicator()
-                      : Text("게시하기"),
+                      : Text("회원가입 하기"),
                 ),
               ],
             ),
