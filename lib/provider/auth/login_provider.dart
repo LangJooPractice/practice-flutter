@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/models/auth/login_model.dart';
-import 'package:prac/services/login_service.dart';
+import 'package:prac/services/auth/login_service.dart';
 
 final loginApiServiceProvider = Provider<LoginApiService>((ref) {
   return LoginApiService();

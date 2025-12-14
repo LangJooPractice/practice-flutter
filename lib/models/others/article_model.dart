@@ -8,7 +8,9 @@ class ArticleModel {
   final double retweet_num;
   final double favorite_num;
   final double statistics;
-  final String id;
+  final String tweetId;
+  final String comment_control;
+  final bool isLiked;
 
   ArticleModel({
     required this.profile_picture,
@@ -21,7 +23,9 @@ class ArticleModel {
     required this.retweet_num,
     required this.favorite_num,
     required this.statistics,
-    required this.id,
+    required this.tweetId,
+    required this.comment_control,
+    required this.isLiked,
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
@@ -31,11 +35,13 @@ class ArticleModel {
       nickname_id: json['nickname_id'],
       time: json['time'],
       article_string: json['article_string'],
+      comment_control: json['comment_control'],
       comment_num: (json['comment_num'] as num).toDouble(),
       retweet_num: (json['retweet_num'] as num).toDouble(),
       favorite_num: (json['favorite_num'] as num).toDouble(),
       statistics: (json['statistics'] as num).toDouble(),
-      id: json['id'],
+      tweetId: json['tweetId'],
+      isLiked: json["isLiked"],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:prac/models/others/article_model.dart';
+import 'package:prac/provider/tweet/comment_control_provider.dart';
 
 class ArticleApiService {
   final Dio _dio = Dio(
@@ -22,11 +23,14 @@ class ArticleApiService {
   }
 
   //POST
-  Future<void> postArticle(String content) async {
+  Future<void> postArticle(String content, CommentControl commentState) async {
     try {
       final request = await _dio.post(
         "article_model",
-        data: {"article_string": content},
+        data: {
+          "article_string": content,
+          "comment_Control": commentState.toString(),
+        },
       );
       if (request.statusCode != 201) {
         throw Exception(

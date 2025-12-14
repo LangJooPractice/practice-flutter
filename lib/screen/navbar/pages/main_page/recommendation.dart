@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prac/models/others/article_model.dart';
-import 'package:prac/provider/others/article_provider.dart';
+import 'package:prac/provider/tweet/article_provider.dart';
 import 'package:prac/provider/others/scroll_provider.dart';
+import 'package:prac/provider/tweet/main_article_button_provider.dart';
 
 //InkWell위젯을 사용하면 Inkwel child의 Row내의 children위젯들을 겹치기 할 수있다는 사실!
 
@@ -68,6 +69,12 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                   height: 40,
                   widget.articles.profile_picture,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey,
+                      child: Icon(Icons.error),
+                    );
+                  },
                 ),
               ),
             ),
@@ -75,15 +82,19 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  //닉네임과 아이디를 출력합니다.
                   Row(
                     children: [
                       Text(widget.articles.nickname),
                       Text("@${widget.articles.nickname_id}"),
+                      Text("tweetId : ${widget.articles.tweetId}"),
                     ],
                   ),
                   SizedBox(height: 5),
+                  //게시글 본문을 출력합니다.
                   Row(children: [Text(widget.articles.article_string)]),
                   SizedBox(height: 10),
+                  //답글 창 버튼입니다
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -100,6 +111,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                           ),
                         ),
                       ),
+                      //리트윗 버튼
                       Expanded(
                         child: InkWell(
                           onTap: () {},
@@ -113,13 +125,20 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                           ),
                         ),
                       ),
+                      //좋아요 버튼
                       Expanded(
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            ref
+                                .read(likedApiServiceProvider)
+                                .pressLike(widget.articles.tweetId);
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.favorite_border_outlined),
+                              widget.articles.isLiked
+                                  ? Icon(Icons.favorite, color: Colors.pink)
+                                  : Icon(Icons.favorite_border_outlined),
                               SizedBox(width: 2),
                               Text("${widget.articles.favorite_num.toInt()}"),
                             ],
