@@ -1,8 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
+
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:prac/provider/auth/token_provider.dart';
 
 class LoginApiService {
+  final Ref ref;
+  LoginApiService({required this.ref});
+
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: "http://10.0.2.2:8080",
@@ -35,6 +42,8 @@ class LoginApiService {
         await storage.write(key: "refreshtoken", value: refreshToken);
         await storage.write(key: "tokentype", value: tokenType);
         await storage.write(key: "username", value: username);
+
+        ref.read(accessTokenProvider.notifier).state = accessToken;
 
         return "success";
       }

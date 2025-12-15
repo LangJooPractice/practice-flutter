@@ -21,14 +21,14 @@ class _RecommendationState extends ConsumerState<Recommendation> {
       scrollControllerProvider,
     ); //스크롤 컨트롤러로 스크롤 위치 유지, 무한 스크롤 등의 기능을 함
     final articleAsync = ref.watch(
-      ArticleProvider,
+      articleApiProvider,
     ); //백으로부터 article의 정보를 가져와 리스트뷰에 뿌려줌
 
     return articleAsync.when(
       data: (articles) {
         return ListView.builder(
           controller: scrollController,
-          itemCount: articles.length,
+          itemCount: articles.length, //받아온 articles객체의 개수
           itemBuilder: (context, index) {
             final article = articles[index];
             return ArticleContainer(articles: article);
@@ -71,7 +71,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                 child: Image.network(
                   width: 40,
                   height: 40,
-                  widget.articles.profile_picture,
+                  "https://loremflickr.com/1795/1444?lock=233092803421850",
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
@@ -90,13 +90,13 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                   Row(
                     children: [
                       Text(widget.articles.nickname),
-                      Text("@${widget.articles.nickname_id}"),
+                      Text("@${widget.articles.nickname}"),
                       Text("tweetId : ${widget.articles.tweetId}"),
                     ],
                   ),
                   SizedBox(height: 5),
                   //게시글 본문을 출력합니다.
-                  Row(children: [Text(widget.articles.article_string)]),
+                  Row(children: [Text(widget.articles.content)]),
                   SizedBox(height: 10),
                   //답글 창 버튼입니다
                   Row(
@@ -110,7 +110,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                             children: [
                               Icon(Icons.chat_bubble_outline),
                               SizedBox(width: 2),
-                              Text("${widget.articles.comment_num.toInt()}"),
+                              Text("${widget.articles.replyToTweetId.toInt()}"),
                             ],
                           ),
                         ),
@@ -124,7 +124,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                             children: [
                               Icon(Icons.repeat_rounded),
                               SizedBox(width: 2),
-                              Text("${widget.articles.retweet_num.toInt()}"),
+                              Text("${widget.articles.retweetCount.toInt()}"),
                             ],
                           ),
                         ),
@@ -140,13 +140,13 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               //response로 받은 isLiked값에 따라 버튼 변경
-                              widget.articles.isLiked
+                              widget.articles.likedByMe
                                   ? Icon(Icons.favorite, color: Colors.pink)
                                   : Icon(Icons.favorite_border_outlined),
                               SizedBox(width: 2),
                               //ui처음 로드할때 받은 졸아요값
                               //TODO : 이것도 증가시켜야됨
-                              Text("${widget.articles.favorite_num.toInt()}"),
+                              Text("${widget.articles.likeCount.toInt()}"),
                             ],
                           ),
                         ),
@@ -162,7 +162,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                               child: Row(
                                 children: [
                                   Icon(Icons.bar_chart_rounded),
-                                  Text('${widget.articles.statistics.toInt()}'),
+                                  Text('10'),
                                 ],
                               ),
                             ),

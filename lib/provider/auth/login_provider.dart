@@ -5,7 +5,7 @@ import 'package:prac/models/auth/login_model.dart';
 import 'package:prac/services/auth/login_service.dart';
 
 final loginApiServiceProvider = Provider<LoginApiService>((ref) {
-  return LoginApiService();
+  return LoginApiService(ref: ref);
 });
 
 final loginProvider =

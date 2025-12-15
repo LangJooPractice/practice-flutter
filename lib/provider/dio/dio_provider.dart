@@ -7,7 +7,7 @@ final dioProvider = Provider<Dio>((ref) {
     //baseurl을 설정합니다.
     BaseOptions(
       contentType: "application/json",
-      baseUrl: "http://localhost:8080/",
+      baseUrl: "http://10.0.2.2:8080",
     ),
   );
 
@@ -18,6 +18,7 @@ final dioProvider = Provider<Dio>((ref) {
       onRequest: (options, handler) {
         //accessToken을 가져옵니다
         final accessToken = ref.read(accessTokenProvider.notifier).state;
+        print("accessToken = $accessToken");
         if (accessToken != null) {
           options.headers["Authorization"] = "Bearer $accessToken";
         }

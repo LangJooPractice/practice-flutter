@@ -1,17 +1,48 @@
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutter_riverpod/legacy.dart';
+// import 'package:prac/models/others/article_model.dart';
+// import 'package:prac/provider/dio/dio_provider.dart';
+// import 'package:prac/provider/tweet/comment_control_provider.dart';
+// import 'package:prac/services/tweet/article_api_service.dart';
+
+// //apiservice 인스턴스를 반환합니다
+// //디오 프로바이더를 구독합니다.
+// final articleApiServiceProvider = Provider<ArticleApiService>((ref) {
+//   final dio = ref.watch(dioProvider);
+//   return ArticleApiService(dio: dio);
+// });
+
+// //apiservice 인스턴스를 생성하고 구독합니다. -> 이후 service에서 FETCH
+// final ArticleProvider = FutureProvider<List<ArticleModel>>((ref) async {
+//   final articleApiService = ref.watch(articleApiServiceProvider);
+//   return articleApiService.fetchArticles();
+// });
+
+//일단 ArticleApiService 프로바이더 생성
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/models/others/article_model.dart';
+import 'package:prac/provider/dio/dio_provider.dart';
 import 'package:prac/provider/tweet/comment_control_provider.dart';
 import 'package:prac/services/tweet/article_api_service.dart';
 
+//일단 ArticleApiService 프로바이더 생성
 final articleApiServiceProvider = Provider<ArticleApiService>((ref) {
-  return ArticleApiService();
+  //클래스에서 필요로하는 인터셉터 디오 DI
+  final dio = ref.watch(dioProvider);
+
+  return ArticleApiService(dio: dio);
 });
 
-final ArticleProvider = FutureProvider<List<ArticleModel>>((ref) async {
-  final articleApiService = ref.watch(articleApiServiceProvider);
-  return articleApiService.fetchArticles();
+//그 다음에 FutureProvider를 통해서 fetchArticles진행
+
+final articleApiProvider = FutureProvider<List<ArticleModel>>((ref) async {
+  final articleApi = ref.watch(articleApiServiceProvider);
+  return articleApi.fetchArticles();
 });
+
+//------------------------------------------------------------
 
 final postArticleProvider = StateNotifierProvider((ref) {
   return PostArticleNotifier(ref.watch(articleApiServiceProvider), ref);
@@ -40,7 +71,7 @@ class PostArticleNotifier extends StateNotifier<AsyncValue<void>> {
       await _api.postArticle(content, commentState);
 
       // 4) 기존 게시글 목록 새로고침 (타임라인 갱신)
-      _ref.invalidate(ArticleProvider);
+      _ref.invalidate(articleApiProvider);
 
       // 5) 성공 상태로 변경
       state = const AsyncData(null);

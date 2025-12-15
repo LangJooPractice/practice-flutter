@@ -1,47 +1,64 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class ArticleModel {
-  final String profile_picture;
+  // final String profile_picture;
+  // final String nickname;
+  // final String nickname_id;
+  // final String time;
+  // final String article_string;
+  // final double comment_num;
+  // final double retweet_num;
+  // final double favorite_num;
+  // final double statistics;
+  // final String tweetId;
+  // final String comment_control;
+  // final bool isLiked;
+  // final bool retweetedByMe;
+
+  final String type;
+  final int originalTweetId;
+  final int tweetId;
+  final String content;
+  final String createdAt;
+  final int userId;
+  final String username;
   final String nickname;
-  final String nickname_id;
-  final String time;
-  final String article_string;
-  final double comment_num;
-  final double retweet_num;
-  final double favorite_num;
-  final double statistics;
-  final String tweetId;
-  final String comment_control;
-  final bool isLiked;
+  final int likeCount;
+  final int retweetCount;
+  final int replyToTweetId;
+  final bool likedByMe;
+  final bool retweetedByMe;
 
   ArticleModel({
-    required this.profile_picture,
-
-    required this.nickname,
-    required this.nickname_id,
-    required this.time,
-    required this.article_string,
-    required this.comment_num,
-    required this.retweet_num,
-    required this.favorite_num,
-    required this.statistics,
+    required this.type,
+    required this.originalTweetId,
     required this.tweetId,
-    required this.comment_control,
-    required this.isLiked,
+    required this.content,
+    required this.createdAt,
+    required this.userId,
+    required this.username,
+    required this.nickname,
+    required this.likeCount,
+    required this.retweetCount,
+    required this.replyToTweetId,
+    required this.likedByMe,
+    required this.retweetedByMe,
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
-      profile_picture: json['profile_picture'],
+      type: json["type"],
+      originalTweetId: (json["originalTweetId"] as num).toInt(),
+      tweetId: (json["tweetId"] as num).toInt(),
+      content: json['content'],
+      createdAt: json['createdAt'],
+      userId: (json['userId'] as num).toInt(),
+      username: json['username'],
       nickname: json['nickname'],
-      nickname_id: json['nickname_id'],
-      time: json['time'],
-      article_string: json['article_string'],
-      comment_control: json['comment_control'],
-      comment_num: (json['comment_num'] as num).toDouble(),
-      retweet_num: (json['retweet_num'] as num).toDouble(),
-      favorite_num: (json['favorite_num'] as num).toDouble(),
-      statistics: (json['statistics'] as num).toDouble(),
-      tweetId: json['tweetId'],
-      isLiked: json["isLiked"],
+      likeCount: (json['likeCount'] as num).toInt(),
+      retweetCount: (json['retweetCount'] as num).toInt(),
+      replyToTweetId: (json['replyToTweetId'] as num).toInt(),
+      likedByMe: json['likedByMe'],
+      retweetedByMe: json['retweetedByMe'],
     );
   }
 }
