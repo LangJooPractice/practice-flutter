@@ -1,9 +1,15 @@
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginApiService {
   final Dio dio = Dio(
-    BaseOptions(baseUrl: "https://693108ef11a8738467ccfc6c.mockapi.io/"),
+    BaseOptions(
+      baseUrl: "http://10.0.2.2:8080",
+      validateStatus: (status) {
+        return status != null && status < 500;
+      },
+    ),
   );
 
   Future<String> requestLogin(String email, String password) async {
@@ -11,9 +17,10 @@ class LoginApiService {
     try {
       //서버로 로그인요청을 보냅니다. 포함사항 : 아이디, 비밀번호
       final request = await dio.post(
-        "api/auth/login",
-        data: {"loginId": email, "password ": password},
+        "/api/users/login",
+        data: {"loginId": email, "password": password},
       );
+      log(request.statusCode!);
 
       //request를 받아오고 그 응답의 data를 reponse 변수에 저장합니다.
       final response = request.data;

@@ -92,7 +92,7 @@ class _RegisterState extends ConsumerState<Register> {
                     obscureText: isObscure,
                     controller: registerPasswordController,
                     decoration: InputDecoration(
-                      hintText: "비밀번호는 최소 6자리여야 합니다.",
+                      hintText: "비밀번호는 최소 8자리여야 합니다.",
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -111,8 +111,8 @@ class _RegisterState extends ConsumerState<Register> {
                         return "비밀번호를 입력하세요,";
                       }
                       //Null 체크 이후 value.length 사용
-                      else if (value.length < 5) {
-                        return "비밀번호는 최소 6자리여야 합니다.";
+                      else if (value.length < 8) {
+                        return "비밀번호는 최소 8자리여야 합니다.";
                       }
                       return null;
                     },

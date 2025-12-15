@@ -39,20 +39,20 @@ class LoginNotifier extends StateNotifier<LoginModel> {
     state.copyWith(email: email, password: password, result: AsyncLoading());
 
     //-------------------------------------
-    if (email == "test@test.com" && password == "123456") {
-      state = state.copyWith(
-        email: email,
-        password: password,
-        result: AsyncData("success"),
-      );
-    } else if (password != "123456") {
-      state = state.copyWith(
-        email: email,
-        password: password,
-        result: AsyncData("unauthorized"),
-      );
-    }
-    //-------------------------------------
+    // if (email == "test@test.com" && password == "123456") {
+    //   state = state.copyWith(
+    //     email: email,
+    //     password: password,
+    //     result: AsyncData("success"),
+    //   );
+    // } else if (password != "123456") {
+    //   state = state.copyWith(
+    //     email: email,
+    //     password: password,
+    //     result: AsyncData("unauthorized"),
+    //   );
+    // }
+    // //-------------------------------------
     try {
       String responseStatus = await api.requestLogin(email, password);
       if (responseStatus == "success") {
