@@ -26,8 +26,8 @@ class LoginApiService {
       final response = request.data;
       //성공한경우 각각의 토큰과 username을 변수에 저장하고 이를 storage에 보관합니다.
       if (request.statusCode == 200) {
-        final accessToken = response['accesstoken'];
-        final refreshToken = response['refreshtoken'];
+        final accessToken = response['accessToken'];
+        final refreshToken = response['refreshToken'];
         final username = response['username'];
         final tokenType = response['tokenType'];
 

@@ -1,6 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/services/auth/register_service.dart';

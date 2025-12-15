@@ -13,7 +13,7 @@ class _ProfileState extends ConsumerState<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text("프로필 페이지 입니다.")),
+      body: Center(child: Column(children: [Text("프로필 페이지 입니다.")])),
     );
   }
 }
