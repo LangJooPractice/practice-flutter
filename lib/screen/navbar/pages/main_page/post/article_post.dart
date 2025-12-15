@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prac/provider/others/article_provider.dart';
-import 'package:prac/provider/others/comment_control_provider.dart';
+import 'package:prac/provider/tweet/article_provider.dart';
+import 'package:prac/provider/tweet/comment_control_provider.dart';
 
 class ArticlePost extends ConsumerStatefulWidget {
   const ArticlePost({super.key});
@@ -39,12 +39,13 @@ class _ArticlePostState extends ConsumerState<ArticlePost> {
       appBar: AppBar(
         actions: [
           TextButton(
+            //게시내용과 답글을 달수 있는 사람 두개의 인수를 전달합니다.
             onPressed: () {
               postState.isLoading
                   ? null
                   : ref
                         .read(postArticleProvider.notifier)
-                        .postArticle(textController.text);
+                        .postArticle(textController.text, commentState);
             },
             child: postState.isLoading
                 ? SizedBox(child: CircularProgressIndicator())

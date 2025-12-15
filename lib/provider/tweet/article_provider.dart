@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/models/others/article_model.dart';
-import 'package:prac/services/article_api_service.dart';
+import 'package:prac/provider/tweet/comment_control_provider.dart';
+import 'package:prac/services/tweet/article_api_service.dart';
 
 final articleApiServiceProvider = Provider<ArticleApiService>((ref) {
   return ArticleApiService();
@@ -24,7 +25,7 @@ class PostArticleNotifier extends StateNotifier<AsyncValue<void>> {
   PostArticleNotifier(this._api, this._ref) : super(const AsyncData(null));
 
   // 게시글 작성 함수
-  Future<void> postArticle(String content) async {
+  Future<void> postArticle(String content, CommentControl commentState) async {
     // 1) 간단한 프론트 유효성 검사
     if (content.trim().isEmpty) {
       state = AsyncError('내용이 비어 있습니다.', StackTrace.current);
@@ -36,7 +37,7 @@ class PostArticleNotifier extends StateNotifier<AsyncValue<void>> {
 
     try {
       // 3) 실제 API 호출
-      await _api.postArticle(content);
+      await _api.postArticle(content, commentState);
 
       // 4) 기존 게시글 목록 새로고침 (타임라인 갱신)
       _ref.invalidate(ArticleProvider);

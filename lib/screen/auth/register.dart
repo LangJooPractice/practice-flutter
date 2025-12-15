@@ -11,9 +11,11 @@ class Register extends ConsumerStatefulWidget {
 }
 
 class _RegisterState extends ConsumerState<Register> {
+  //텍스트 폼필드 컨트롤러
   final registerEmailController = TextEditingController();
   final registerPasswordController = TextEditingController();
-  //password textform 에서 비밀번호를 보일지 말지 결정하는 bool값
+  final registerNicknameController = TextEditingController();
+  final registerUsernameController = TextEditingController();
   bool isObscure = true;
 
   @override
@@ -41,7 +43,7 @@ class _RegisterState extends ConsumerState<Register> {
             Future.delayed(Duration(seconds: 3)).then((_) {
               context.pop();
             });
-          } else if (value == "fail") {
+          } else if (value == "redundant") {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text("중복되는 이메일입니다. 다시 확인하세요.")));
@@ -72,6 +74,7 @@ class _RegisterState extends ConsumerState<Register> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
+                  //이메일 입력 폼필드
                   TextFormField(
                     controller: registerEmailController,
                     decoration: InputDecoration(hintText: "이메일"),
@@ -84,6 +87,7 @@ class _RegisterState extends ConsumerState<Register> {
                       return null;
                     },
                   ),
+                  //비밀번호 입력 폼필드
                   TextFormField(
                     obscureText: isObscure,
                     controller: registerPasswordController,
@@ -113,6 +117,21 @@ class _RegisterState extends ConsumerState<Register> {
                       return null;
                     },
                   ),
+                  //닉네임 입력 폼필드
+                  TextFormField(
+                    controller: registerNicknameController,
+                    decoration: InputDecoration(hintText: "사용할 닉네임을 입력하세요"),
+                    //닉네임 중복체크는 실행하지 않습니다.
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: registerUsernameController,
+                    decoration: InputDecoration(
+                      hintText: "@유저이름   다른사람이 찾을수 있게 해보세요.",
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -128,22 +147,20 @@ class _RegisterState extends ConsumerState<Register> {
                   onPressed: registerState.isLoading
                       ? null
                       : () async {
-                          try {
-                            await ref
-                                .read(postRegisterProvider.notifier)
-                                .postRegister(
-                                  registerEmailController.text,
-                                  registerPasswordController.text,
-                                );
-                          } catch (e) {
-                            throw Exception(e);
-                          }
+                          await ref
+                              .read(postRegisterProvider.notifier)
+                              .postRegister(
+                                registerEmailController.text,
+                                registerPasswordController.text,
+                                registerNicknameController.text,
+                                registerUsernameController.text,
+                              );
                         },
                   //누른경우 그 직후 registerState가 AsyncLoading으로 변하므로 버퍼가 돌고
                   //이후 응답을 받으면 AsyncData값을 가지므로 다시 버튼을 활성화 함
                   child: registerState.isLoading
                       ? CircularProgressIndicator()
-                      : Text("게시하기"),
+                      : Text("회원가입 하기"),
                 ),
               ],
             ),
