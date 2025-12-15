@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LikedApiService {
+  //디오 인터셉터 주입
   final Dio dio;
 
   LikedApiService(this.dio);

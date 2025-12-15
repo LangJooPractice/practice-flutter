@@ -23,6 +23,7 @@ class _RecommendationState extends ConsumerState<Recommendation> {
     final articleAsync = ref.watch(
       ArticleProvider,
     ); //백으로부터 article의 정보를 가져와 리스트뷰에 뿌려줌
+
     return articleAsync.when(
       data: (articles) {
         return ListView.builder(
@@ -54,6 +55,9 @@ class ArticleContainer extends ConsumerStatefulWidget {
 class _ArticleContainerState extends ConsumerState<ArticleContainer> {
   @override
   Widget build(BuildContext context) {
+    // final likeState = ref.watch(likeProvider(widget.articles));
+    // final likeNotifier = ref.read(likeProvider(widget.articles).notifier);
+
     return InkWell(
       onTap: () {},
       child: SizedBox(
@@ -129,17 +133,19 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            ref
-                                .read(likedApiServiceProvider)
-                                .pressLike(widget.articles.tweetId);
+                            // //프로바이더를 통해서 apiService 서버통신
+                            // ref.read(likeProvider.notifier).
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              //response로 받은 isLiked값에 따라 버튼 변경
                               widget.articles.isLiked
                                   ? Icon(Icons.favorite, color: Colors.pink)
                                   : Icon(Icons.favorite_border_outlined),
                               SizedBox(width: 2),
+                              //ui처음 로드할때 받은 졸아요값
+                              //TODO : 이것도 증가시켜야됨
                               Text("${widget.articles.favorite_num.toInt()}"),
                             ],
                           ),

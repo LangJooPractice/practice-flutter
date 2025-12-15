@@ -1,3 +1,6 @@
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/services/auth/register_service.dart';
@@ -19,21 +22,31 @@ class RegisterProvider extends StateNotifier<AsyncValue<String?>> {
   final RegisterApiService api;
 
   RegisterProvider({required this.api}) : super(const AsyncData(null));
-  Future<String> postRegister(String email, String password) async {
+  Future<String> postRegister(
+    String email,
+    String password,
+    String nickname,
+    String username,
+  ) async {
     //1차 검증
 
     //일단 로딩으로 바꿔
     state = AsyncLoading();
     //---------------------------------------
-    if (email == "test@test.com" && password == "123456") {
-      state = AsyncData("success");
-      return "success";
-    }
+    // if (email == "test@test.com" && password == "123456") {
+    //   state = AsyncData("success");
+    //   return "success";
+    // }
     //---------------------------------------
 
     //2차 백으로 request 전달
     try {
-      String responseStatus = await api.requestRegister(email, password);
+      String responseStatus = await api.requestRegister(
+        email,
+        password,
+        nickname,
+        username,
+      );
 
       //그리고 상태를 AsyncData로 바꿔
       //
@@ -44,8 +57,8 @@ class RegisterProvider extends StateNotifier<AsyncValue<String?>> {
       }
       //
       //상태가 fail 즉 회원가입상에서 중복인경우
-      else if (responseStatus == "fail") {
-        state = AsyncData("fail");
+      else if (responseStatus == "redundant") {
+        state = AsyncData("redundant");
         return responseStatus;
       }
       //
