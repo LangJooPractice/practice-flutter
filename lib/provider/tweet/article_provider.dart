@@ -22,6 +22,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:prac/models/auth/login_model.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/provider/dio/dio_provider.dart';
 import 'package:prac/provider/tweet/comment_control_provider.dart';
@@ -42,7 +43,7 @@ final articleApiProvider = FutureProvider<List<ArticleModel>>((ref) async {
   return articleApi.fetchArticles();
 });
 
-//------------------------------------------------------------
+//--r----------------------------------------------------------
 
 final postArticleProvider = StateNotifierProvider((ref) {
   return PostArticleNotifier(ref.watch(articleApiServiceProvider), ref);
