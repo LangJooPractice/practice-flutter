@@ -16,7 +16,7 @@ class LoginApiService {
     BaseOptions(
       baseUrl: "http://10.0.2.2:8080",
       validateStatus: (status) {
-        return status != null && status < 500;
+        return status != null && status < 600;
       },
     ),
   );
@@ -55,6 +55,7 @@ class LoginApiService {
       }
       //서버 내부 오류인경우
       else if (request.statusCode == 500) {
+        //error code 500인경우 해당 계정이 존재하지않음
         throw InternalServerException();
       }
       //기타 오류인경우
@@ -63,7 +64,7 @@ class LoginApiService {
       }
       //request status code 400 이메일 또는 비밀번호 형식 오류는 모바일에서 validate
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 }
