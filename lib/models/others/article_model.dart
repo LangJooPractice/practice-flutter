@@ -15,7 +15,7 @@ class ArticleModel {
   // final bool retweetedByMe;
 
   final String type;
-  final int originalTweetId;
+  final int? originalTweetId;
   final int tweetId;
   final String content;
   final String createdAt;
@@ -24,7 +24,7 @@ class ArticleModel {
   final String nickname;
   final int likeCount;
   final int retweetCount;
-  final int replyToTweetId;
+  final int? replyToTweetId;
   final bool likedByMe;
   final bool retweetedByMe;
 
@@ -47,7 +47,7 @@ class ArticleModel {
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
       type: json["type"],
-      originalTweetId: (json["originalTweetId"] as num).toInt(),
+      originalTweetId: (json["originalTweetId"] as num?)?.toInt(),
       tweetId: (json["tweetId"] as num).toInt(),
       content: json['content'],
       createdAt: json['createdAt'],
@@ -56,7 +56,7 @@ class ArticleModel {
       nickname: json['nickname'],
       likeCount: (json['likeCount'] as num).toInt(),
       retweetCount: (json['retweetCount'] as num).toInt(),
-      replyToTweetId: (json['replyToTweetId'] as num).toInt(),
+      replyToTweetId: (json['replyToTweetId'] as num?)?.toInt(),
       likedByMe: json['likedByMe'],
       retweetedByMe: json['retweetedByMe'],
     );

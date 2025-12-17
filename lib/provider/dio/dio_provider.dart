@@ -20,8 +20,23 @@ final dioProvider = Provider<Dio>((ref) {
         final accessToken = ref.read(accessTokenProvider.notifier).state;
         print("accessToken = $accessToken");
         if (accessToken != null) {
+          options.headers["Authorization"] = "bearer $accessToken";
+        }
+        return handler.next(options);
+      },
+    ),
+  );
+
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        final accessToken = ref.read(accessTokenProvider.notifier).state;
+        print("accessToken = $accessToken");
+
+        if (accessToken != null && accessToken.isNotEmpty) {
           options.headers["Authorization"] = "Bearer $accessToken";
         }
+
         return handler.next(options);
       },
     ),

@@ -110,7 +110,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                             children: [
                               Icon(Icons.chat_bubble_outline),
                               SizedBox(width: 2),
-                              Text("${widget.articles.replyToTweetId.toInt()}"),
+                              Text("${widget.articles.replyToTweetId}"),
                             ],
                           ),
                         ),

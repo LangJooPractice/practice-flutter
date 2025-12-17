@@ -33,22 +33,19 @@ class ArticleApiService {
     return articles;
   }
 
-  Future<void> postArticle(String content, CommentControl commentState) async {
+  Future<void> postArticleService(
+    String content,
+    CommentControl commentState,
+  ) async {
     try {
-      final request = await dio.post(
-        "article_model",
-        data: {
-          "article_string": content,
-          "comment_Control": commentState.toString(),
-        },
-      );
+      final request = await dio.post("/api/tweets", data: {"content": content});
       if (request.statusCode != 201) {
         throw Exception(
           '게시글 post 실패 : ${request.statusCode} : ${request.data}',
         );
       }
     } catch (e) {
-      throw Exception("오류 발생 : $e");
+      rethrow;
     }
   }
 }

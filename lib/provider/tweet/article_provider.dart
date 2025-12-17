@@ -20,6 +20,7 @@
 
 //일단 ArticleApiService 프로바이더 생성
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prac/models/auth/login_model.dart';
@@ -51,10 +52,10 @@ final postArticleProvider = StateNotifierProvider((ref) {
 
 class PostArticleNotifier extends StateNotifier<AsyncValue<void>> {
   final ArticleApiService _api;
-  final Ref _ref; //이 ref는 다른 provider 여기에서는 ArticleProvider
+  final Ref ref; //이 ref는 다른 provider 여기에서는 ArticleProvider
   //를 invalidate 하기 위해서 전달받음
 
-  PostArticleNotifier(this._api, this._ref) : super(const AsyncData(null));
+  PostArticleNotifier(this._api, this.ref) : super(const AsyncData(null));
 
   // 게시글 작성 함수
   Future<void> postArticle(String content, CommentControl commentState) async {
@@ -69,10 +70,10 @@ class PostArticleNotifier extends StateNotifier<AsyncValue<void>> {
 
     try {
       // 3) 실제 API 호출
-      await _api.postArticle(content, commentState);
+      await _api.postArticleService(content, commentState);
 
       // 4) 기존 게시글 목록 새로고침 (타임라인 갱신)
-      _ref.invalidate(articleApiProvider);
+      ref.invalidate(articleApiProvider);
 
       // 5) 성공 상태로 변경
       state = const AsyncData(null);
