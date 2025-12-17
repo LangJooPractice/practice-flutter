@@ -37,6 +37,10 @@ class LoginNotifier extends StateNotifier<LoginModel> {
     return state.email;
   }
 
+  String? getUsername() {
+    return state.username;
+  }
+
   Future<void> login(String email, String password) async {
     //일단 상태를 로딩으로 바꿉니다.
     state = state.copyWith(
@@ -75,6 +79,7 @@ class LoginNotifier extends StateNotifier<LoginModel> {
       state = state.copyWith(
         email: email,
         password: password,
+        username: responseStatus.username,
         result: AsyncData("success"),
       );
     } on LoginUnauthorizedException {

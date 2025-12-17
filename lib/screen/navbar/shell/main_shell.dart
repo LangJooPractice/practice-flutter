@@ -1,9 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+
+import 'package:prac/models/others/article_model.dart';
+import 'package:prac/provider/auth/login_provider.dart';
+import 'package:prac/provider/tweet/article_provider.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   final Widget child;
@@ -32,7 +37,7 @@ class _MainShellState extends ConsumerState<MainShell> {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
-
+    final username = ref.read(loginProvider.notifier).getUsername();
     int currentIndex = 0;
     if (location.startsWith('/main')) {
       currentIndex = 0;
@@ -62,7 +67,7 @@ class _MainShellState extends ConsumerState<MainShell> {
         ),
       ),
       body: widget.child,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(username: username),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -157,7 +162,8 @@ class _MainShellState extends ConsumerState<MainShell> {
 }
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
+  String? username;
+  MainDrawer({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +184,7 @@ class MainDrawer extends StatelessWidget {
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text("사용자 이름"), Text("@사용자 아이디")],
+                    children: [Text("사용자 이름"), Text("@$username")],
                   ),
                 ),
               ],
