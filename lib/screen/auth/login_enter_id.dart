@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prac/models/auth/login_model.dart';
 import 'package:prac/provider/auth/login_provider.dart';
 
 class LoginEnterId extends ConsumerStatefulWidget {

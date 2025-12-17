@@ -5,10 +5,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'package:prac/models/others/article_model.dart';
 import 'package:prac/provider/auth/login_provider.dart';
-import 'package:prac/provider/tweet/article_provider.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   final Widget child;

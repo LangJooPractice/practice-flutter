@@ -20,10 +20,8 @@
 
 //일단 ArticleApiService 프로바이더 생성
 
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:prac/models/auth/login_model.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/provider/dio/dio_provider.dart';
 import 'package:prac/provider/tweet/comment_control_provider.dart';

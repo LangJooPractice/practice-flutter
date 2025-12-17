@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-
 import 'package:prac/models/others/article_model.dart';
-import 'package:prac/provider/dio/dio_provider.dart';
 import 'package:prac/provider/tweet/comment_control_provider.dart';
 
 class ArticleApiService {
