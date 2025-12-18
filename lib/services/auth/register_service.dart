@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:dio/dio.dart';
 
@@ -30,7 +30,7 @@ class RegisterApiService {
         },
         // options: Options(headers: {'Content-type': 'application/json'}),
       );
-      log(request.statusCode!);
+      dev.log(request.statusCode!.toString());
 
       // final response = request.data; //백에서 받아오는 성공/실패 json
       //성공이면 success 반환
@@ -46,7 +46,7 @@ class RegisterApiService {
         return "${request.statusCode} : ${request.statusMessage}";
       }
     } catch (e) {
-      throw Exception("오류 발생 : $e");
+      rethrow;
     }
   }
 }
