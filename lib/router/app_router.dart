@@ -7,7 +7,8 @@ import 'package:prac/screen/auth/register.dart';
 import 'package:prac/screen/navbar/pages/grok.dart';
 import 'package:prac/screen/navbar/pages/main_page.dart';
 import 'package:prac/screen/navbar/pages/main_page/post/article_post.dart';
-import 'package:prac/screen/navbar/profile.dart';
+import 'package:prac/screen/tweet_profile/tweet_detail.dart';
+import 'package:prac/screen/tweet_profile/profile.dart';
 import 'package:prac/screen/navbar/shell/main_shell.dart';
 import 'package:prac/screen/navbar/pages/message.dart';
 import 'package:prac/screen/navbar/pages/notification.dart';
@@ -45,6 +46,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/register',
         builder: (context, state) {
           return Register();
+        },
+      ),
+      //여기서 전달되는 tweetId는 반드시 존재하기 때문에 ! 사용 가능
+      //or 조건문에서 널체크
+      GoRoute(
+        path: '/tweet/:tweetId',
+        builder: (context, state) {
+          final tweetId = state.pathParameters["tweetId"]!;
+          return TweetDetailScreen(tweetId: tweetId);
         },
       ),
       // ============================

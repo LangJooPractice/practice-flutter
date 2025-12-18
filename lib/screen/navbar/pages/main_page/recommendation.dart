@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/provider/tweet/article_provider.dart';
 import 'package:prac/provider/others/scroll_provider.dart';
@@ -58,7 +59,9 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
     // final likeNotifier = ref.read(likeProvider(widget.articles).notifier);
 
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.push('/tweet/${widget.articles.tweetId}');
+      },
       child: SizedBox(
         width: double.infinity,
         child: Row(
