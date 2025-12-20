@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class LikeResponse {
   final int tweetId;
   final int likeCount;
   final bool liked;
-
   LikeResponse({
     required this.tweetId,
     required this.likeCount,

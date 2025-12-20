@@ -50,18 +50,22 @@ class ArticleContainer extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ArticleContainerState(articles.tweetId);
+      _ArticleContainerState();
 }
 
 class _ArticleContainerState extends ConsumerState<ArticleContainer> {
-  final int tweetId;
-
-  _ArticleContainerState(this.tweetId);
-
   @override
   Widget build(BuildContext context) {
+    //이건 ui 그리기용
     final likeAsync = ref.watch(likeProvider(widget.articles));
+    //이건 method 쓰기용
     final notifier = ref.read(likeProvider(widget.articles).notifier);
+
+    //article 받아서 초기상태 구현하고 -> api도 보내면 되겟네?
+    //그럼 일단 response 모델을 만들어
+    //그리고 state를 저장할 likestate 모델도 만들어
+    //근데 article 마다 provider가 있어야 되네? -> 그럼 family 쓰면 될듯?
+
     return InkWell(
       onTap: () {
         context.push('/tweet/${widget.articles.tweetId}');
@@ -136,44 +140,34 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                         ),
                       ),
                       //좋아요 버튼
-                      // 좋아요 버튼
                       Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            notifier.toggleLike();
+                        child: likeAsync.when(
+                          data: (data) {
+                            return InkWell(
+                              onTap: () {
+                                notifier.toggleLike();
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  //response로 받은 isLiked값에 따라 버튼 변경
+                                  data.liked
+                                      ? Icon(Icons.favorite, color: Colors.pink)
+                                      : Icon(Icons.favorite_border_outlined),
+                                  SizedBox(width: 2),
+                                  //ui처음 로드할때 받은 졸아요값
+                                  //TODO : 이것도 증가시켜야됨
+                                  Text("${data.likeCount}"),
+                                ],
+                              ),
+                            );
                           },
-                          child: likeAsync.when(
-                            data: (likeState) => Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                likeState.isLiked
-                                    ? const Icon(
-                                        Icons.favorite,
-                                        color: Colors.pink,
-                                      )
-                                    : const Icon(
-                                        Icons.favorite_border_outlined,
-                                      ),
-                                const SizedBox(width: 2),
-                                Text('${likeState.likeCount}'),
-                              ],
-                            ),
-                            loading: () => const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.favorite_border_outlined),
-                                SizedBox(width: 2),
-                                SizedBox(
-                                  width: 12,
-                                  height: 12,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            error: (_, __) => const Icon(Icons.error),
-                          ),
+                          error: (error, stackTrace) {
+                            return Icon(Icons.error);
+                          },
+                          loading: () {
+                            return CircularProgressIndicator();
+                          },
                         ),
                       ),
 

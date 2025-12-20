@@ -1,0 +1,17 @@
+import 'package:dio/dio.dart';
+import 'package:prac/models/others/like_response.dart';
+
+class LikeService {
+  //provider선언시 Dio DI
+  final Dio dio;
+
+  LikeService({required this.dio});
+
+  //LikeReponse 형태로 LikeNotifier에 전달해주고
+  //LikeNotifier에서 해당 reponse를 판단하도록 함
+  Future<LikeResponse> toggleLike(int tweetId) async {
+    final response = await dio.post('/api/tweets/$tweetId/like');
+
+    return LikeResponse.fromJson(response.data);
+  }
+}
