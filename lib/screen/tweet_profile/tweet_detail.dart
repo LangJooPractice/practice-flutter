@@ -44,6 +44,7 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
                   likeCount: data.likeCount,
                 ),
                 Divider(),
+                //리트윗 좋아요 인용 버튼 row
                 ButtonRow(),
                 Divider(),
               ],

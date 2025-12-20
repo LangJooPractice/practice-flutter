@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/provider/tweet/article_provider.dart';
 import 'package:prac/provider/others/scroll_provider.dart';
+import 'package:prac/provider/tweet/like_provider.dart';
 
 //InkWell위젯을 사용하면 Inkwel child의 Row내의 children위젯들을 겹치기 할 수있다는 사실!
 
@@ -49,15 +50,18 @@ class ArticleContainer extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ArticleContainerState();
+      _ArticleContainerState(articles.tweetId);
 }
 
 class _ArticleContainerState extends ConsumerState<ArticleContainer> {
+  final int tweetId;
+
+  _ArticleContainerState(this.tweetId);
+
   @override
   Widget build(BuildContext context) {
-    // final likeState = ref.watch(likeProvider(widget.articles));
-    // final likeNotifier = ref.read(likeProvider(widget.articles).notifier);
-
+    final likeAsync = ref.watch(likeProvider(widget.articles));
+    final notifier = ref.read(likeProvider(widget.articles).notifier);
     return InkWell(
       onTap: () {
         context.push('/tweet/${widget.articles.tweetId}');
@@ -132,24 +136,43 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                         ),
                       ),
                       //좋아요 버튼
+                      // 좋아요 버튼
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            // //프로바이더를 통해서 apiService 서버통신
-                            // ref.read(likeProvider.notifier).
+                            notifier.toggleLike();
                           },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              //response로 받은 isLiked값에 따라 버튼 변경
-                              widget.articles.likedByMe
-                                  ? Icon(Icons.favorite, color: Colors.pink)
-                                  : Icon(Icons.favorite_border_outlined),
-                              SizedBox(width: 2),
-                              //ui처음 로드할때 받은 졸아요값
-                              //TODO : 이것도 증가시켜야됨
-                              Text("${widget.articles.likeCount.toInt()}"),
-                            ],
+                          child: likeAsync.when(
+                            data: (likeState) => Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                likeState.isLiked
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Colors.pink,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_border_outlined,
+                                      ),
+                                const SizedBox(width: 2),
+                                Text('${likeState.likeCount}'),
+                              ],
+                            ),
+                            loading: () => const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.favorite_border_outlined),
+                                SizedBox(width: 2),
+                                SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            error: (_, __) => const Icon(Icons.error),
                           ),
                         ),
                       ),
