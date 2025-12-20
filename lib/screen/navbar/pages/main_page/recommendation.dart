@@ -56,6 +56,9 @@ class ArticleContainer extends ConsumerStatefulWidget {
 class _ArticleContainerState extends ConsumerState<ArticleContainer> {
   @override
   Widget build(BuildContext context) {
+    //이 안애 family provider를 정의함으로서 article각각에 대해서
+    //provider를 설정 할 수 있습니다.
+
     //이건 ui 그리기용
     final likeAsync = ref.watch(likeProvider(widget.articles));
     //이건 method 쓰기용
@@ -142,6 +145,7 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                       //좋아요 버튼
                       Expanded(
                         child: likeAsync.when(
+                          //data의 타입은 LikeState입니다.
                           data: (data) {
                             return InkWell(
                               onTap: () {
@@ -155,8 +159,6 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                                       ? Icon(Icons.favorite, color: Colors.pink)
                                       : Icon(Icons.favorite_border_outlined),
                                   SizedBox(width: 2),
-                                  //ui처음 로드할때 받은 졸아요값
-                                  //TODO : 이것도 증가시켜야됨
                                   Text("${data.likeCount}"),
                                 ],
                               ),
@@ -166,7 +168,20 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
                             return Icon(Icons.error);
                           },
                           loading: () {
-                            return CircularProgressIndicator();
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.favorite_border_outlined),
+                                SizedBox(width: 2),
+                                SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ],
+                            );
                           },
                         ),
                       ),

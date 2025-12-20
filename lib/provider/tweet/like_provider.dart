@@ -12,6 +12,10 @@ final likeApiServiceProvider = Provider<LikeService>((ref) {
   return LikeService(dio: dio);
 });
 
+//family 프로바이더를 사용하는 이유는 각각의 Article마다 프로바이더를 제공하기 위함이며
+//각각의 provider는 tweetId로 구분하나
+//Notifier Provider내에서 article의 초기 상태값을 필요로 하므로
+//ArticleModel 자체를 전달합니다.
 final likeProvider = AsyncNotifierProvider.autoDispose
     .family<LikeNotifier, LikeState, ArticleModel>(LikeNotifier.new);
 
@@ -24,24 +28,31 @@ class LikeNotifier extends AsyncNotifier<LikeState> {
   LikeNotifier(this.article);
 
   //초기값 설정
+  //초기값은 family의 인자를 통해서 받은 ArticleModel의 인스턴스의
+  // likeCount, likedByMe 값으로 이는 처음 article을 보여줄때의 값입니다.
   @override
   LikeState build() {
     return LikeState(likeCount: article.likeCount, liked: article.likedByMe);
   }
 
   Future<void> toggleLike() async {
+    //먼저 state를 로딩으로 바꾸어 ui상에서 loading일때
+    //circular progress indicator 를 사용 할 수 있게 합니다.
     state = AsyncValue.loading();
 
     try {
+      //일단 apiService의 toggleLike를 실행하여 res<LikeResponse>값을 받아오고
       final res = await ref
           .read(likeApiServiceProvider)
           .toggleLike(article.tweetId);
-
+      //그 후 state를 바꿔줍니다.
+      //물론 AsyncNotifier이므로 이때의 상태는 AsyncValue.data 입니다.
       state = AsyncValue.data(
         LikeState(likeCount: res.likeCount, liked: res.liked),
       );
-    } catch (e) {
-      rethrow;
+    } catch (e, st) {
+      //에러인경우 상태 변경
+      state = AsyncValue.error(e, st);
     }
   }
 }
