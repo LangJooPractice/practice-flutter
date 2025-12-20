@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:prac/provider/tweet/like_provider.dart';
 import 'package:prac/provider/tweet/tweet_provider.dart';
 
 class TweetDetailScreen extends ConsumerStatefulWidget {
@@ -18,6 +19,10 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
   Widget build(BuildContext context) {
     final tweetDetailAsync = ref.watch(tweetDetailProvider(widget.tweetId));
 
+    //ui 상태 반환
+    // final likeAsync = ref.watch();
+    //method사용
+
     return Scaffold(
       appBar: AppBar(title: Text("게시하기", style: TextStyle(fontSize: 20))),
       body: tweetDetailAsync.when(
@@ -25,6 +30,10 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
           return Center(child: Text("error : $error stacktrace : $stackTrace"));
         },
         data: (data) {
+          //좋아요 ui상태
+          final likeAsync = ref.watch(likeTweetDetailProvider(data));
+          //좋아요 method 사용
+          final likeNotifier = ref.read(likeTweetDetailProvider(data).notifier);
           return Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Column(
@@ -45,7 +54,7 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
                 ),
                 Divider(),
                 //리트윗 좋아요 인용 버튼 row
-                ButtonRow(),
+                ButtonRow(likeAsync: likeAsync, likeNotifier: likeNotifier),
                 Divider(),
               ],
             ),
@@ -61,7 +70,13 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
 
 //버튼있는 row
 class ButtonRow extends StatelessWidget {
-  const ButtonRow({super.key});
+  final AsyncValue likeAsync;
+  final LikeTweetDetailNotifier likeNotifier;
+  const ButtonRow({
+    super.key,
+    required this.likeAsync,
+    required this.likeNotifier,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +103,35 @@ class ButtonRow extends StatelessWidget {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 터치 영역 축소
             ),
           ),
+          //좋아요
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.favorite),
+            onPressed: () {
+              likeNotifier.toggleLike();
+            },
+            icon: likeAsync.when(
+              data: (data) {
+                return data.liked
+                    ? Icon(Icons.favorite, color: Colors.pink)
+                    : Icon(Icons.favorite_border, color: Colors.black);
+              },
+              error: (error, stackTrace) {
+                return Icon(Icons.error);
+              },
+              loading: () {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.favorite_border_outlined),
+                    SizedBox(width: 2),
+                    SizedBox(
+                      width: 12,
+                      height: 12,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ],
+                );
+              },
+            ),
             style: IconButton.styleFrom(
               padding: EdgeInsets.zero,
               minimumSize: Size.zero,

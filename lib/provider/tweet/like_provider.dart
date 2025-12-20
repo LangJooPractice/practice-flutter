@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/models/others/like_state.dart';
+import 'package:prac/models/others/tweet_detail_model.dart';
 import 'package:prac/provider/dio/dio_provider.dart';
+import 'package:prac/provider/tweet/tweet_provider.dart';
 import 'package:prac/services/tweet/like_service.dart';
 
 //ApiService를 반환하는 provider
@@ -11,6 +13,9 @@ final likeApiServiceProvider = Provider<LikeService>((ref) {
   //LikeService 반환
   return LikeService(dio: dio);
 });
+
+//---------------------------------------------------------------------------------------------------------
+//main에서의 Like Provider
 
 //family 프로바이더를 사용하는 이유는 각각의 Article마다 프로바이더를 제공하기 위함이며
 //각각의 provider는 tweetId로 구분하나
@@ -53,6 +58,43 @@ class LikeNotifier extends AsyncNotifier<LikeState> {
     } catch (e, st) {
       //에러인경우 상태 변경
       state = AsyncValue.error(e, st);
+    }
+  }
+}
+
+//---------------------------------------------------------------------------------------------------------
+
+//TweetDetail 창에서의 like provider
+
+final likeTweetDetailProvider = AsyncNotifierProvider.autoDispose
+    .family<LikeTweetDetailNotifier, LikeState, TweetDetailModel>(
+      LikeTweetDetailNotifier.new,
+    );
+
+class LikeTweetDetailNotifier extends AsyncNotifier<LikeState> {
+  //인수로 전달한 tweetDetailModel을 family 인자로 받습니다.
+  final TweetDetailModel model;
+  LikeTweetDetailNotifier(this.model);
+
+  @override
+  //해당 페이지의 tweetDetailModel의 인스턴스 값을 초기값으로 설정합니다.
+  LikeState build() {
+    return LikeState(likeCount: model.likeCount, liked: model.likedByMe);
+  }
+
+  Future<void> toggleLike() async {
+    state = AsyncValue.loading();
+
+    try {
+      final response = await ref
+          .read(likeApiServiceProvider)
+          .toggleLike(model.tweetId);
+
+      state = AsyncValue.data(
+        LikeState(likeCount: response.likeCount, liked: response.liked),
+      );
+    } catch (e) {
+      rethrow;
     }
   }
 }
