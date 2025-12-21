@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prac/models/others/article_model.dart';
 import 'package:prac/models/others/like_state.dart';
@@ -21,24 +24,40 @@ final likeApiServiceProvider = Provider<LikeService>((ref) {
 //각각의 provider는 tweetId로 구분하나
 //Notifier Provider내에서 article의 초기 상태값을 필요로 하므로
 //ArticleModel 자체를 전달합니다.
-final likeProvider = AsyncNotifierProvider.autoDispose
-    .family<LikeNotifier, LikeState, ArticleModel>(LikeNotifier.new);
+final likeProvider = AsyncNotifierProvider.family<LikeNotifier, LikeState, int>(
+  LikeNotifier.new,
+);
 
 class LikeNotifier extends AsyncNotifier<LikeState> {
   //이거 인수로 받는다는 뜻
   //위에서 선언한 fammily 의 인자를 아래 연관된 notifier의
   //생성자를 통해 저장할 수 있습니다.
   //https://riverpod.dev/docs/concepts2/family
-  final ArticleModel article;
-  LikeNotifier(this.article);
+  final int tweetId;
+  LikeNotifier(this.tweetId);
 
   //초기값 설정
   //초기값은 family의 인자를 통해서 받은 ArticleModel의 인스턴스의
   // likeCount, likedByMe 값으로 이는 처음 article을 보여줄때의 값입니다.
   @override
-  LikeState build() {
-    return LikeState(likeCount: article.likeCount, liked: article.likedByMe);
+  FutureOr<LikeState> build() async {
+    final res = await ref
+        .read(likeApiServiceProvider)
+        .fetchLike(tweetId.toString());
+    debugPrint(
+      "빌드 안에서 : res.likeCount = ${res.likeCount}, res.liked = ${res.liked}",
+    );
+
+    // state = AsyncValue.data(
+    //   LikeState(likeCount: res.likeCount, liked: res.liked),
+    // );
+
+    return LikeState(likeCount: res.likeCount, liked: res.liked);
   }
+
+  // Future<void> _fetch() async {
+
+  // }
 
   Future<void> toggleLike() async {
     //먼저 state를 로딩으로 바꾸어 ui상에서 loading일때
@@ -47,11 +66,12 @@ class LikeNotifier extends AsyncNotifier<LikeState> {
 
     try {
       //일단 apiService의 toggleLike를 실행하여 res<LikeResponse>값을 받아오고
-      final res = await ref
-          .read(likeApiServiceProvider)
-          .toggleLike(article.tweetId);
+      final res = await ref.read(likeApiServiceProvider).toggleLike(tweetId);
       //그 후 state를 바꿔줍니다.
       //물론 AsyncNotifier이므로 이때의 상태는 AsyncValue.data 입니다.
+      debugPrint(
+        "after toggle likecount = ${res.likeCount}, liked = ${res.liked}",
+      );
       state = AsyncValue.data(
         LikeState(likeCount: res.likeCount, liked: res.liked),
       );

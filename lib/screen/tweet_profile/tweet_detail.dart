@@ -31,9 +31,10 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
         },
         data: (data) {
           //좋아요 ui상태
-          final likeAsync = ref.watch(likeTweetDetailProvider(data));
-          //좋아요 method 사용
-          final likeNotifier = ref.read(likeTweetDetailProvider(data).notifier);
+          final likeAsync = ref.watch(likeProvider(int.parse(widget.tweetId)));
+          final likeNotifier = ref.read(
+            likeProvider(int.parse(widget.tweetId)).notifier,
+          );
           return Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Column(
@@ -71,7 +72,7 @@ class _TweetDetailScreenState extends ConsumerState<TweetDetailScreen> {
 //버튼있는 row
 class ButtonRow extends StatelessWidget {
   final AsyncValue likeAsync;
-  final LikeTweetDetailNotifier likeNotifier;
+  final LikeNotifier likeNotifier;
   const ButtonRow({
     super.key,
     required this.likeAsync,

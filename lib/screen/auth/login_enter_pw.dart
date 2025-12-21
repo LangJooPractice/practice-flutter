@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prac/models/auth/login_model.dart';
 import 'package:prac/provider/auth/login_provider.dart';
+import 'package:prac/provider/tweet/article_provider.dart';
+import 'package:prac/provider/tweet/like_provider.dart';
 
 class LoginEnterPw extends ConsumerStatefulWidget {
   const LoginEnterPw({super.key});
@@ -28,6 +30,9 @@ class _LoginEnterPwState extends ConsumerState<LoginEnterPw> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text("로그인 되었습니다.")));
+            ref.invalidate(likeProvider);
+            ref.invalidate(articleApiProvider);
+
             context.go('/main');
           } else if (value == "unauthorized") {
             ScaffoldMessenger.of(

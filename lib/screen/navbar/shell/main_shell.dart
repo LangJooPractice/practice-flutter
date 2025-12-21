@@ -217,11 +217,17 @@ class MainDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
                         onPressed: () {},
                         icon: Icon(Icons.wb_sunny_outlined),
+                      ),
+                      IconButton.filled(
+                        onPressed: () {
+                          context.go("/login");
+                        },
+                        icon: Icon(Icons.exit_to_app),
                       ),
                     ],
                   ),

@@ -17,4 +17,17 @@ class LikeService {
 
     return LikeResponse.fromJson(response.data);
   }
+
+  //TODO : 그냥 좋아요값만을 return하는 api가 필요함
+
+  //해당 메소드는 post한후 좋아요 상태를 "변환"시키는 post작업이므로
+  //이전 상태를 불러오기 위해서는 "두번"실행해야함
+  //원래상태 = 1,true ->한번 0, false -> 두번 1,true
+  //아니면 그냥 트윗 상세 페이지 값 가져와서 파싱해도 되긴 함
+  Future<LikeResponse> fetchLike(String tweetId) async {
+    final res2 = await dio.post('/api/tweets/$tweetId/like');
+    final res1 = await dio.post('/api/tweets/$tweetId/like');
+
+    return LikeResponse.fromJson(res1.data);
+  }
 }

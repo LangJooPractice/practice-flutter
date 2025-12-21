@@ -32,6 +32,9 @@ class _RecommendationState extends ConsumerState<Recommendation> {
           itemCount: articles.length, //받아온 articles객체의 개수
           itemBuilder: (context, index) {
             final article = articles[index];
+            // debugPrint(
+            //   "article 뿌릴때 : likecount = ${article.likeCount}, liked = ${article.likedByMe}",
+            // );
             return ArticleContainer(articles: article);
           },
         );
@@ -60,9 +63,9 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
     //provider를 설정 할 수 있습니다.
 
     //이건 ui 그리기용
-    final likeAsync = ref.watch(likeProvider(widget.articles));
+    final likeAsync = ref.watch(likeProvider(widget.articles.tweetId));
     //이건 method 쓰기용
-    final notifier = ref.read(likeProvider(widget.articles).notifier);
+    final notifier = ref.read(likeProvider(widget.articles.tweetId).notifier);
 
     //article 받아서 초기상태 구현하고 -> api도 보내면 되겟네?
     //그럼 일단 response 모델을 만들어
