@@ -138,7 +138,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                 toggleChildren(); // ← 이게 닫기
               }
             },
-            child: Icon(isOpen ? Icons.post_add : Icons.close),
+            child: Icon(isOpen ? Icons.post_add : Icons.add),
           );
         },
         children: [

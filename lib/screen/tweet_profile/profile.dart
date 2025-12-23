@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prac/provider/auth/login_provider.dart';
 import 'package:prac/provider/others/profile_provider.dart';
+import 'package:prac/provider/tweet/like_provider.dart';
+import 'package:prac/widgets/tweet_list_tile.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -15,6 +18,8 @@ class _ProfileState extends ConsumerState<Profile> {
   Widget build(BuildContext context) {
     final username = ref.read(loginProvider.notifier).getUsername();
     final profileAsync = ref.watch(profileProvider);
+
+    //이건 ui 그리기용
 
     return profileAsync.when(
       data: (data) {
@@ -104,10 +109,47 @@ class _ProfileState extends ConsumerState<Profile> {
                     Tab(text: "마음에 들어요"),
                   ],
                 ),
+                SizedBox(height: 10),
+
                 Expanded(
                   child: TabBarView(
                     children: [
-                      Text("게시글"),
+                      InkWell(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: data.recentTweets.length,
+                                itemBuilder: (context, index) {
+                                  //이건 ui 그리기용
+                                  final likeAsync = ref.watch(
+                                    likeProvider(
+                                      data.recentTweets[index].tweetId,
+                                    ),
+                                  );
+                                  //이건 method 쓰기용
+                                  final notifier = ref.read(
+                                    likeProvider(
+                                      data.recentTweets[index].tweetId,
+                                    ).notifier,
+                                  );
+                                  return TweetListTile(
+                                    nickname: data.recentTweets[index].nickname,
+                                    username: data.recentTweets[index].username,
+                                    tweetId: data.recentTweets[index].tweetId,
+                                    content: data.recentTweets[index].content,
+                                    retweetCount:
+                                        data.recentTweets[index].retweetCount,
+                                    // widget: widget,
+                                    likeAsync: likeAsync,
+                                    notifier: notifier,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Text("게시글"),
                       Text("게시글"),
                       Text("게시글"),

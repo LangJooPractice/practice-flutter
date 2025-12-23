@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:prac/models/others/article_model.dart';
-import 'package:prac/provider/tweet/article_provider.dart';
+import 'package:prac/models/others/like_state.dart';
 import 'package:prac/provider/others/scroll_provider.dart';
+import 'package:prac/provider/tweet/article_provider.dart';
 import 'package:prac/provider/tweet/like_provider.dart';
+import 'package:prac/widgets/tweet_list_tile.dart';
 
 //InkWell위젯을 사용하면 Inkwel child의 Row내의 children위젯들을 겹치기 할 수있다는 사실!
 
@@ -72,156 +76,16 @@ class _ArticleContainerState extends ConsumerState<ArticleContainer> {
     //그리고 state를 저장할 likestate 모델도 만들어
     //근데 article 마다 provider가 있어야 되네? -> 그럼 family 쓰면 될듯?
 
-    return InkWell(
-      onTap: () {
-        context.push('/tweet/${widget.articles.tweetId}');
-      },
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: ClipOval(
-                child: Image.network(
-                  width: 40,
-                  height: 40,
-                  "https://loremflickr.com/1795/1444?lock=233092803421850",
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey,
-                      child: Icon(Icons.error),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  //닉네임과 아이디를 출력합니다.
-                  Row(
-                    children: [
-                      Text(widget.articles.nickname),
-                      Text("@${widget.articles.nickname}"),
-                      Text("tweetId : ${widget.articles.tweetId}"),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  //게시글 본문을 출력합니다.
-                  Row(children: [Text(widget.articles.content)]),
-                  SizedBox(height: 10),
-                  //답글 창 버튼입니다
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.chat_bubble_outline),
-                              SizedBox(width: 2),
-                              Text("${widget.articles.replyToTweetId}"),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //리트윗 버튼
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.repeat_rounded),
-                              SizedBox(width: 2),
-                              Text("${widget.articles.retweetCount.toInt()}"),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //좋아요 버튼
-                      Expanded(
-                        child: likeAsync.when(
-                          //data의 타입은 LikeState입니다.
-                          data: (data) {
-                            return InkWell(
-                              onTap: () {
-                                notifier.toggleLike();
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  //response로 받은 isLiked값에 따라 버튼 변경
-                                  data.liked
-                                      ? Icon(Icons.favorite, color: Colors.pink)
-                                      : Icon(Icons.favorite_border_outlined),
-                                  SizedBox(width: 2),
-                                  Text("${data.likeCount}"),
-                                ],
-                              ),
-                            );
-                          },
-                          error: (error, stackTrace) {
-                            return Icon(Icons.error);
-                          },
-                          loading: () {
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.favorite_border_outlined),
-                                SizedBox(width: 2),
-                                SizedBox(
-                                  width: 12,
-                                  height: 12,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-
-                      SizedBox(
-                        width: 120,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              onTap: () {},
-                              child: Row(
-                                children: [
-                                  Icon(Icons.bar_chart_rounded),
-                                  Text('10'),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.bookmark_border_outlined),
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.share_outlined),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    return TweetListTile(
+      // widget: widget,
+      likeAsync: likeAsync,
+      notifier: notifier,
+      nickname: widget.articles.nickname,
+      username: widget.articles.username,
+      tweetId: widget.articles.tweetId,
+      content: widget.articles.content,
+      replyToTweetId: widget.articles.replyToTweetId,
+      retweetCount: widget.articles.retweetCount,
     );
   }
 }
